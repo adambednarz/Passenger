@@ -15,9 +15,9 @@ namespace Passenger.Core.Domain
         }
         public Vehicle(string brand, string name, int seats)
         {
-            Brand = brand;
-            Name = name;
-            Seats = seats;
+            SetBrand(brand);
+            SetName(name);
+            SetSeats(seats);
         }
 
         private void SetBrand(string brand)

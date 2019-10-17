@@ -11,9 +11,11 @@ namespace Passenger.Infrastructure.Repositories
     {
         private static readonly ISet<User> _users = new HashSet<User>
         {
-            new User("user1@email.com", "user1", "secret", "salt"),
+            new User("username@email.com", "user1", "secret", "salt"),
             new User("user2@email.com", "user2", "secret", "salt"),
-            new User("user3@email.com", "user3", "secret", "salt"),
+            new User("user3@email.com", "user2", "secret", "salt"),
+            new User("user4@emailcom", "user2", "secret", "salt"),
+            new User("user5email.com", "user3", "secret", "salt")
         };
 
         public void Add(User user)
@@ -36,7 +38,6 @@ namespace Passenger.Infrastructure.Repositories
             _users.Remove(user);
         }
         
-
         public void Update(User user)
         {
             // na razie nic nie robi bo nie posiadamy bazy danych 
