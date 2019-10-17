@@ -21,9 +21,8 @@ namespace Passenger.Infrastructure.Repositories
         
 
         public IEnumerable<Driver> GetAll()
-        {
-            throw new NotImplementedException();
-        }
+            => _drivers;
+
 
         public void Update(Driver driver)
         {
