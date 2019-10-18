@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Passenger.Infrastructure.Repositories
 {
@@ -11,34 +12,34 @@ namespace Passenger.Infrastructure.Repositories
     {
         private static readonly ISet<User> _users = new HashSet<User>
         {
-            new User("username@email.com", "user1", "secret", "salt"),
+            new User("user1@email.com", "user1", "secret", "salt"),
             new User("user2@email.com", "user2", "secret", "salt"),
-            new User("user3@email.com", "user2", "secret", "salt"),
-            new User("user4@emailcom", "user2", "secret", "salt"),
-            new User("user5email.com", "user3", "secret", "salt")
+            new User("user3@email.com", "user23", "secret", "salt"),
+            new User("user4@emailcom", "user4", "secret", "salt"),
+            new User("user5email.com", "user5", "secret", "salt")
         };
 
-        public void Add(User user)
+        public Task AddAsync(User user)
         {
             _users.Add(user);
         }
 
-        public User Get(Guid id)
+        public Task<User> GetAsync(Guid id)
         => _users.Single(x => x.Id == id);
 
-        public User Get(string email)
-        => _users.Single(x => x.Email == email.ToLowerInvariant());
+        public Task<User> GetAsync(string email)
+        => _users.SingleOrDefault(x => x.Email == email.ToLowerInvariant());
 
-        public IEnumerable<User> GetAll()
+        public Task<IEnumerable<User>> GetAllAsync()
         => _users;
 
-        public void Remove(Guid id)
+        public Task RemoveAsync(Guid id)
         {
-            var user = Get(id);
+            var user = GetAsync(id);
             _users.Remove(user);
         }
         
-        public void Update(User user)
+        public Task UpdateAsync(User user)
         {
             // na razie nic nie robi bo nie posiadamy bazy danych 
         }

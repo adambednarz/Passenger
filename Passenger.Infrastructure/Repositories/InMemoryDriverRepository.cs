@@ -4,28 +4,34 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Passenger.Infrastructure.Repositories
 {
-    class InMemoryDriverRepository : IDriverRepository
+    public class InMemoryDriverRepository : IDriverRepository
     {
-        private static ISet<Driver> _drivers = new HashSet<Driver>();
+        private static ISet<Driver> _drivers = new HashSet<Driver>
+            {
+                new Driver("Focus"),
+            };
 
-        public void Add(Driver driver)
+        public Task AddAsync(Driver driver)
         {
             _drivers.Add(driver);
         }
 
-        public Driver Get(Guid userId)
+        public Task<Driver> GetAsync(Guid userId)
             => _drivers.Single(x => x.UserId == userId);
-        
 
-        public IEnumerable<Driver> GetAll()
+        public Task<Driver> GetAsync(string name)
+            => _drivers.SingleOrDefault(x => x.Name == name);
+
+        public Task<IEnumerable<Driver>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public void Update(Driver driver)
+        public Task UpdateAsync(Driver driver)
         {
             throw new NotImplementedException();
         }

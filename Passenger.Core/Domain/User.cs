@@ -37,13 +37,13 @@ namespace Passenger.Core.Domain
         }
         public void SetUserName(string userName)
         {
-            if(!_nameRegex.IsMatch(userName))
-            {
-                throw new Exception("Username is invalid");
-                //throw new DomainException(ErrorCodes.InvalidUsername,
-                //    "Username is invalid.");
-            }
-            else if(string.IsNullOrEmpty(userName))
+            //if(!_nameRegex.IsMatch(userName))
+            //{
+            //    throw new Exception("Username is invalid");
+            //    //throw new DomainException(ErrorCodes.InvalidUsername,
+            //    //    "Username is invalid.");
+            //}
+            if(string.IsNullOrEmpty(userName))
             {
                 throw new Exception("Username is invalid");
             }
@@ -71,7 +71,7 @@ namespace Passenger.Core.Domain
         {
             if(string.IsNullOrWhiteSpace(password))
             {
-                throw new Exception("Passworc can not be  empty");
+                throw new Exception("Password can not be  empty");
             }
             if(password.Length < 4)
             {

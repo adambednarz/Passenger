@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Passenger.Core.Repositories;
+using Passenger.Infrastructure.Mapper;
 using Passenger.Infrastructure.Repositories;
 using Passenger.Infrastructure.Services;
 
@@ -30,6 +31,9 @@ namespace Passenger.Api
         {
             services.AddScoped<IUserRepository, InMemoryUserRepository>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IDriverService, DriverService>();
+            services.AddScoped<IDriverRepository, InMemoryDriverRepository>();
+            services.AddSingleton(MapperConfig.Initialize());
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

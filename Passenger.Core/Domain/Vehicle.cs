@@ -20,6 +20,9 @@ namespace Passenger.Core.Domain
             SetSeats(seats);
         }
 
+        public static Vehicle SetVehicle(string brand, string name, int seats)
+         => new Vehicle(brand, name, seats);
+
         private void SetBrand(string brand)
         {
             if (string.IsNullOrWhiteSpace(brand))

@@ -17,7 +17,7 @@ namespace Passenger.Infrastructure.Services
 
         public UserDto Get(string email)
         {
-            var user = _userRepository.Get(email);
+            var user = _userRepository.GetAsync(email);
             return new UserDto
             {
                 Id = user.Id,
@@ -29,7 +29,7 @@ namespace Passenger.Infrastructure.Services
 
         public void Register(string email, string userName, string password)
         {
-            var user = _userRepository.Get(email);
+            var user = _userRepository.GetAsync(email);
             if (user != null)
             {
                 throw new Exception($"User with email: '{email}' already exist.");
@@ -37,7 +37,7 @@ namespace Passenger.Infrastructure.Services
 
             var salt = Guid.NewGuid().ToString("N");
             user = new User(email, userName, password, salt);
-            _userRepository.Add(user);
+            _userRepository.AddAsync(user);
           //  user = new User() 
         }
     }
