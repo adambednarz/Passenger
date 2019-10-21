@@ -18,7 +18,7 @@ namespace Passenger.Api.Controllers
             _driverService = driverService;
         }
         [HttpGet("{name}")]
-        public DriverDto Get(string name)
-            => _driverService.Get(name);
+        public async Task<DriverDto> GetAsync(string name)
+            => await _driverService.GetAsync(name);
     }
 }

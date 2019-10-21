@@ -10,30 +10,30 @@ namespace Passenger.Infrastructure.Repositories
 {
     public class InMemoryDriverRepository : IDriverRepository
     {
-        private static ISet<Driver> _drivers = new HashSet<Driver>
+        private static readonly ISet<Driver> _drivers = new HashSet<Driver>
             {
                 new Driver("Focus"),
             };
 
-        public Task AddAsync(Driver driver)
+        public async Task AddAsync(Driver driver)
         {
             _drivers.Add(driver);
+            await Task.CompletedTask;
         }
 
-        public Task<Driver> GetAsync(Guid userId)
-            => _drivers.Single(x => x.UserId == userId);
+        public async Task<Driver> GetAsync(Guid userId)
+            => await Task.FromResult(_drivers.Single(x => x.UserId == userId));
 
-        public Task<Driver> GetAsync(string name)
-            => _drivers.SingleOrDefault(x => x.Name == name);
+        public async Task<Driver> GetAsync(string name)
+            => await Task.FromResult(_drivers.SingleOrDefault(x => x.Name == name));
 
-        public Task<IEnumerable<Driver>> GetAllAsync()
+        public async Task<IEnumerable<Driver>> GetAllAsync()
+            => await Task.FromResult(_drivers);
+
+        public async Task UpdateAsync(Driver driver)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateAsync(Driver driver)
-        {
-            throw new NotImplementedException();
+           // throw new NotImplementedException();
+            await Task.CompletedTask;
         }
     }
 }

@@ -19,29 +19,32 @@ namespace Passenger.Infrastructure.Repositories
             new User("user5email.com", "user5", "secret", "salt")
         };
 
-        public Task AddAsync(User user)
+        public async Task<User> GetAsync(Guid id)
+        => await Task.FromResult( _users.Single(x => x.Id == id));
+
+        public async Task<User> GetAsync(string email)
+        => await Task.FromResult(_users.SingleOrDefault(x => x.Email == email.ToLowerInvariant()));
+
+        public async Task<IEnumerable<User>> GetAllAsync()
+        => await Task.FromResult(_users);
+
+        public async Task AddAsync(User user)
         {
             _users.Add(user);
+            await Task.CompletedTask;
         }
 
-        public Task<User> GetAsync(Guid id)
-        => _users.Single(x => x.Id == id);
-
-        public Task<User> GetAsync(string email)
-        => _users.SingleOrDefault(x => x.Email == email.ToLowerInvariant());
-
-        public Task<IEnumerable<User>> GetAllAsync()
-        => _users;
-
-        public Task RemoveAsync(Guid id)
+        public async Task RemoveAsync(Guid id)
         {
-            var user = GetAsync(id);
-            _users.Remove(user);
+            var user = await GetAsync(id);
+             _users.Remove(user);
+            await Task.CompletedTask;
         }
         
-        public Task UpdateAsync(User user)
+        public async Task UpdateAsync(User user)
         {
             // na razie nic nie robi bo nie posiadamy bazy danych 
+            await Task.CompletedTask;
         }
     }
 }

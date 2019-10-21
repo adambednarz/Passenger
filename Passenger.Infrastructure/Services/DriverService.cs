@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using AutoMapper;
 using Passenger.Core.Domain;
 using Passenger.Core.Repositories;
@@ -19,14 +20,15 @@ namespace Passenger.Infrastructure.Services
             _mapper = mapper;
         }
 
-        public DriverDto Get(Guid userId)
+        public async Task<DriverDto> GetAsync(Guid userId)
         {
-            var driver = _driverRepository.GetAsync(userId);
-            return _mapper.Map<Driver, DriverDto>(driver);
+            var driver = await _driverRepository.GetAsync(userId);
+            return  _mapper.Map<Driver, DriverDto>(driver);
         }
-        public DriverDto Get(string name)
+
+        public async Task<DriverDto> GetAsync(string name)
         {  
-            var driver = _driverRepository.GetAsync(name);
+            var driver = await _driverRepository.GetAsync(name);
             return _mapper.Map<Driver, DriverDto>(driver);
         }
     }
