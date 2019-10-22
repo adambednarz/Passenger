@@ -1,4 +1,5 @@
-﻿using Passenger.Core.Domain;
+﻿using AutoMapper;
+using Passenger.Core.Domain;
 using Passenger.Core.Repositories;
 using Passenger.Infrastructure.DTO;
 using System;
@@ -11,21 +12,24 @@ namespace Passenger.Infrastructure.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        public UserService(IUserRepository userRepositiry)
+        private readonly IMapper _mapper;
+        public UserService(IUserRepository userRepositiry, IMapper mapper)
         {
             _userRepository = userRepositiry;
+            _mapper = mapper;
         }
 
         public async Task<UserDto> GetAsync(string email)
         {
             var user = await _userRepository.GetAsync(email);
-            return new UserDto
-            {
-                Id = user.Id,
-                UserName = user.UserName,
-                Email = user.Email,
-                FullName = user.FullName
-            };
+            return _mapper.Map<User, UserDto>(user);
+            //return new UserDto
+            //{
+            //    Id = user.Id,
+            //    UserName = user.UserName,
+            //    Email = user.Email,
+            //    FullName = user.FullName
+            //};
         }
 
         public async Task RegisterAsync(string email, string userName, string password)

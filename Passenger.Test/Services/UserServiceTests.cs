@@ -16,11 +16,12 @@ namespace Passenger.Test.Services
     public class UserServiceTests
     {
         [Fact]
-        public async Task Test()
+        public async Task registeer_asyn_shoulf_invoke_addsync_on_repository()
         {
             //Arrange
             var userRapositoryMock = new Mock<IUserRepository>();
-            var userService =  new UserService(userRapositoryMock.Object);
+            var mapperMock = new Mock<IMapper>();
+            var userService =  new UserService(userRapositoryMock.Object, mapperMock.Object);
             
             // Act 
             await userService.RegisterAsync("test@email.com", "Test", "passwordtest");
