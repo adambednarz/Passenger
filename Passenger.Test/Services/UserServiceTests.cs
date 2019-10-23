@@ -16,7 +16,7 @@ namespace Passenger.Test.Services
     public class UserServiceTests
     {
         [Fact]
-        public async Task registeer_asyn_shoulf_invoke_addsync_on_repository()
+        public async Task registeerasyn_shoulf_invoke_addasync_on_repository()
         {
             //Arrange
             var userRapositoryMock = new Mock<IUserRepository>();
