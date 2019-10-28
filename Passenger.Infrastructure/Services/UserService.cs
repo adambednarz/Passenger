@@ -5,6 +5,7 @@ using Passenger.Infrastructure.DTO;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Passenger.Infrastructure.Services
 {
@@ -18,9 +19,9 @@ namespace Passenger.Infrastructure.Services
             _mapper = mapper;
         }
 
-        public UserDto Get(string email)
+        public async Task<UserDto> GetAsync(string email)
         {
-            var user = _userRepository.Get(email);
+            var user = await _userRepository.GetAsync(email);
 
             return _mapper.Map<User, UserDto>(user);
             
@@ -34,17 +35,17 @@ namespace Passenger.Infrastructure.Services
             //};
         }
 
-        public void Register(string email, string userName, string password)
+        public async Task  RegisterAsync(string email, string userName, string password)
         {
-            var user = _userRepository.Get(email);
+            var user = await _userRepository.GetAsync(email);
             if (user != null)
             {
                 throw new Exception($"User with email: '{email}' already exist.");
             }
 
             var salt = Guid.NewGuid().ToString("N");
-            user = new User(email, userName, password, salt);
-            _userRepository.Add(user);
+            user = new User(email, userName, password);
+            await _userRepository.AddAsync(user);
           //  user = new User() 
         }
     }

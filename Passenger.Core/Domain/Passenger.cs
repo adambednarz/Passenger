@@ -10,9 +10,10 @@ namespace Passenger.Core.Domain
         public Guid UserId { get; protected set; }
         public Node Adress { get; protected set; }
 
-        protected Passenger()
+        protected Passenger(User user)
         {
-
+            UserId = user.Id;
         }
+
     }
 }

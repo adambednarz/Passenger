@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Passenger.Core.Repositories
 {
-    public interface IDriverRepository
+    public interface IDriverRepository : IRepository
     {
         Driver Get(Guid userId);
         IEnumerable<Driver> GetAll();

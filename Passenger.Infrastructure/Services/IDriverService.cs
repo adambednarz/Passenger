@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Passenger.Infrastructure.Services
 {
-    public interface IDriverService
+    public interface IDriverService : IService
     {
-        DriverDto Get(Guid serviceId);
+        DriverDto Get(Guid userId);
     }
 }

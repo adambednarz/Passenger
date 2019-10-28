@@ -7,6 +7,7 @@ namespace Passenger.Core.Domain
     public class Driver
     {
         public Guid UserId { get; protected set; }
+        public string Name { get; protected set; }
         public Vehicle Vehicle { get; protected set; }
         public IEnumerable<Route> Routes { get; protected set; }
         public IEnumerable<DailyRoute> DailyRoutes { get; protected set; }
@@ -15,9 +16,17 @@ namespace Passenger.Core.Domain
         {
         }
 
-        public Driver( Guid userid)
+        public Driver(User user)
         {
-            UserId = userid;
+            UserId = user.Id;
+            Name = user.UserName;
+            Vehicle = Vehicle.Create("Ford", "Focus", 5);
         }
+
+        public void SetVehicle(Vehicle vehicle)
+        {
+            Vehicle = vehicle;
+        }
+
     }
 }

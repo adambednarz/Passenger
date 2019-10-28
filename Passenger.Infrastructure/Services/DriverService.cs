@@ -16,11 +16,11 @@ namespace Passenger.Infrastructure.Services
         public DriverService(IDriverRepository driverRepository, IMapper mapper)
         {
             _driverRepository = driverRepository;
+            _mapper = mapper;
         }
         public DriverDto Get(Guid userId)
         {
             var driver = _driverRepository.Get(userId);
-
             return _mapper.Map<Driver, DriverDto>(driver);
         }
 
