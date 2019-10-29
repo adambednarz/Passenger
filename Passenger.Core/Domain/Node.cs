@@ -13,5 +13,50 @@ namespace Passenger.Core.Domain
         protected Node()
         {
         }
+
+        protected Node(string adress, double longitude, double latitude)
+        {
+            SetAdress(adress);
+            SetLongitude(longitude);
+            SetLatitude(latitude);
+        }
+
+        private void SetAdress(string adress)
+        {
+            if (string.IsNullOrEmpty(adress))
+            {
+                throw new Exception("Adress can not be empty.");
+            }
+            if(Adress ==  adress)
+            {
+                return;
+            }
+            Adress = adress;
+        }
+
+        private void SetLongitude(double longitude)
+        {
+            if (double.IsNaN(longitude))
+            {
+                throw new Exception("Latitude must be a number.");
+            }
+            if(Longitude == longitude)
+            {
+                return;
+            }
+            Longitude = longitude;
+        }
+        private void SetLatitude(double latitude)
+        {
+            if (double.IsNaN(latitude))
+            {
+                throw new Exception("Latitude must be a number.");
+            }
+            if (Latitude == latitude)
+            {
+                return;
+            }
+            Latitude = latitude;
+        }
     }
 }

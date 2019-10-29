@@ -16,26 +16,17 @@ namespace Passenger.Core.Domain
         {
         }
 
-        public Driver(string name)
+        public Driver(User user)
         {
-            UserId = Guid.NewGuid();
-            SetName(name);
-            Vehicle = Vehicle.SetVehicle("Ford", "Focus", 4);
+            UserId = user.Id;
+            Name = user.UserName;
+            Vehicle = Vehicle.Create("Ford", "Focus", 5);
         }
 
-        void SetName(string name)
+        public void SetVehicle(Vehicle vehicle)
         {
-            if(string.IsNullOrEmpty(name))
-            {
-                throw new Exception("Name can not be empty.");
-            }
-            if(Name == name)
-            {
-                return;
-            }
-            Name = name;
+            Vehicle = vehicle;
         }
-
 
     }
 }

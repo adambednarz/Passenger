@@ -8,19 +8,19 @@ namespace Passenger.Infrastructure.Commands
 {
     public class CommandDispatcher : ICommandDispatcher
     {
-        private readonly IComponentContext _commponentContext;
-        public CommandDispatcher(IComponentContext componentContext)
+        private readonly IComponentContext _componentContext;
+        public CommandDispatcher(IComponentContext commponentContext)
         {
-            _commponentContext = componentContext;
+            _componentContext = commponentContext;
         }
-        public async Task DispatcherAsync<T>(T command) where T : ICommand
+        public async Task DispatchAsync<T>(T command) where T : ICommand
         {
-            if(_commponentContext == null)
+            if(command == null)
             {
                 throw new ArgumentNullException(nameof(command),
-                    $"Command {typeof(T).Name} can not be null");
+                    $"Command: '{typeof(T).Name} can not be null.");
             }
-            var handler = _commponentContext.Resolve<ICommandHandler<T>>();
+            var handler = _componentContext.Resolve<ICommandHandler<T>>();
             await handler.HandleAsync(command);
         }
     }

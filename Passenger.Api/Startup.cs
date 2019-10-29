@@ -1,13 +1,16 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+
 using Passenger.Core.Repositories;
-using Passenger.Infrastructure.Mapper;
+using Passenger.Infrastructure.IoC.Modules;
+using Passenger.Infrastructure.Mappers;
 using Passenger.Infrastructure.Repositories;
 using Passenger.Infrastructure.Services;
 using System;
@@ -16,27 +19,40 @@ namespace Passenger.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
         public IConfiguration Configuration { get; }
         public IContainer ApplicationContainer { get; private set; }
 
+        public Startup(IHostingEnvironment env /*IConfiguration configuration, IContainer appContainer*/)
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+            Configuration = builder.Build();
+            //ApplicationContainer = appContainer;
+        }
+
+        //This method gets called by the runtime.Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IUserRepository, InMemoryUserRepository>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IDriverService, DriverService>();
-            services.AddScoped<IDriverRepository, InMemoryDriverRepository>();
-            services.AddSingleton(MapperConfig.Initialize());
+            // \/ zostały dla nich stworzone marker interfejsy a następnie moduły,
+            //które dodane zostały do kontynera w klasie Container module 
+            //services.AddScoped<IUserRepository, InMemoryUserRepository>();
+            //services.AddScoped<IUserService, UserService>();
+
+            // \/ wydelegowane do ContainerModule
+            //services.AddSingleton(AutoMapperConfig.Initialize());
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
+
+            // \/ wydelegowanie do Containermodule
+            //builder.RegisterModule<CommandModule>();
+            //builder.RegisterModule(new SettingsModule(Configuration));
+            builder.RegisterModule(new ContainerModule(Configuration));
             ApplicationContainer = builder.Build();
 
             return new AutofacServiceProvider(ApplicationContainer);
@@ -44,7 +60,7 @@ namespace Passenger.Api
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,
-            ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
+            IApplicationLifetime applicationLifetime)
         {
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
@@ -59,10 +75,10 @@ namespace Passenger.Api
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
             app.UseMvc();
-            appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
+            applicationLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
         }
     }
 }

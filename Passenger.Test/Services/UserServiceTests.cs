@@ -1,33 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Xunit;
 using FluentAssertions;
 using System.Threading.Tasks;
-using FluentAssertions.AspNetCore.Mvc;
-using Passenger.Infrastructure.Services;
-using Moq;
+using Xunit;
 using Passenger.Core.Repositories;
+using Moq;
+using Passenger.Infrastructure.Services;
 using AutoMapper;
 using Passenger.Core.Domain;
 
-namespace Passenger.Test.Services
+namespace Passenger.Tests.Services
 {
     public class UserServiceTests
     {
         [Fact]
-        public async Task registeerasyn_shoulf_invoke_addasync_on_repository()
+        public async Task register_async_should_invoke_add_asyn_on_repository()
         {
-            //Arrange
-            var userRapositoryMock = new Mock<IUserRepository>();
+            var userRepositoryMock = new Mock<IUserRepository>();
             var mapperMock = new Mock<IMapper>();
-            var userService =  new UserService(userRapositoryMock.Object, mapperMock.Object);
-            
-            // Act 
-            await userService.RegisterAsync("test@email.com", "Test", "passwordtest");
 
-            //Assert
-            userRapositoryMock.Verify(x => x.AddAsync(It.IsAny<User>()), Times.Once);
+            var userService = new UserService(userRepositoryMock.Object, mapperMock.Object);
+            await userService.RegisterAsync("mock@email.com", "mock", "secret");
+
+            userRepositoryMock.Verify(x => x.AddAsync(It.IsAny<User>()), Times.Once);
         }
     }
 }

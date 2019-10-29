@@ -21,14 +21,13 @@ namespace Passenger.Infrastructure.Repositories
             await Task.CompletedTask;
         }
 
-        public async Task<Driver> GetAsync(Guid userId)
-            => await Task.FromResult(_drivers.Single(x => x.UserId == userId));
+        public Driver Get(Guid userId)
+            => _drivers.SingleOrDefault(x => x.UserId == userId);
+        
 
-        public async Task<Driver> GetAsync(string name)
-            => await Task.FromResult(_drivers.SingleOrDefault(x => x.Name == name));
+        public IEnumerable<Driver> GetAll()
+            => _drivers;
 
-        public async Task<IEnumerable<Driver>> GetAllAsync()
-            => await Task.FromResult(_drivers);
 
         public async Task UpdateAsync(Driver driver)
         {

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Passenger.Core.Domain;
 using Passenger.Core.Repositories;
 using Passenger.Infrastructure.DTO;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Passenger.Infrastructure.Services
 {
@@ -14,22 +13,17 @@ namespace Passenger.Infrastructure.Services
         private readonly IDriverRepository _driverRepository;
         private readonly IMapper _mapper;
 
-        public DriverService(IDriverRepository driverRepositiry, IMapper mapper)
+        public DriverService(IDriverRepository driverRepository, IMapper mapper)
         {
-            _driverRepository = driverRepositiry;
+            _driverRepository = driverRepository;
             _mapper = mapper;
         }
-
-        public async Task<DriverDto> GetAsync(Guid userId)
+        public DriverDto Get(Guid userId)
         {
-            var driver = await _driverRepository.GetAsync(userId);
-            return  _mapper.Map<Driver, DriverDto>(driver);
-        }
-
-        public async Task<DriverDto> GetAsync(string name)
-        {  
-            var driver = await _driverRepository.GetAsync(name);
+            var driver = _driverRepository.Get(userId);
             return _mapper.Map<Driver, DriverDto>(driver);
         }
+
+
     }
 }

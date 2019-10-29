@@ -22,7 +22,10 @@ namespace Passenger.Infrastructure.Services
         public async Task<UserDto> GetAsync(string email)
         {
             var user = await _userRepository.GetAsync(email);
+
             return _mapper.Map<User, UserDto>(user);
+            
+            
             //return new UserDto
             //{
             //    Id = user.Id,
@@ -32,7 +35,7 @@ namespace Passenger.Infrastructure.Services
             //};
         }
 
-        public async Task RegisterAsync(string email, string userName, string password)
+        public async Task  RegisterAsync(string email, string userName, string password)
         {
             var user = await _userRepository.GetAsync(email);
             if (user != null)
@@ -41,7 +44,7 @@ namespace Passenger.Infrastructure.Services
             }
 
             var salt = Guid.NewGuid().ToString("N");
-            user = new User(email, userName, password, salt);
+            user = new User(email, userName, password);
             await _userRepository.AddAsync(user);
           //  user = new User() 
         }

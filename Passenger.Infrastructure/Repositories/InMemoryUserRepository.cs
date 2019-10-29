@@ -12,22 +12,20 @@ namespace Passenger.Infrastructure.Repositories
     {
         private static readonly ISet<User> _users = new HashSet<User>
         {
-            new User("user1@email.com", "user1", "secret", "salt"),
-            new User("user2@email.com", "user2", "secret", "salt"),
-            new User("user3@email.com", "user23", "secret", "salt"),
-            new User("user4@emailcom", "user4", "secret", "salt"),
-            new User("user5email.com", "user5", "secret", "salt")
+            new User("user1@email.com", "user1", "secret"),
+            new User("user2@email.com", "user2", "secret"),
+            new User("user3@email.com", "user3", "secret")
         };
+        
 
         public async Task<User> GetAsync(Guid id)
-        => await Task.FromResult( _users.SingleOrDefault(x => x.Id == id));
+        => await Task.FromResult(_users.SingleOrDefault(x => x.Id == id));
 
         public async Task<User> GetAsync(string email)
         => await Task.FromResult(_users.SingleOrDefault(x => x.Email == email.ToLowerInvariant()));
 
         public async Task<IEnumerable<User>> GetAllAsync()
         => await Task.FromResult(_users);
-
         public async Task AddAsync(User user)
         {
             _users.Add(user);
@@ -41,9 +39,9 @@ namespace Passenger.Infrastructure.Repositories
             await Task.CompletedTask;
         }
         
+
         public async Task UpdateAsync(User user)
         {
-            // na razie nic nie robi bo nie posiadamy bazy danych 
             await Task.CompletedTask;
         }
     }

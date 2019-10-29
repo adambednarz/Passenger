@@ -5,21 +5,21 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Passenger.Infrastructure.Commands;
 using Passenger.Infrastructure.Commands.Users;
-using Passenger.Infrastructure.DTO;
 using Passenger.Infrastructure.Services;
+
 
 namespace Passenger.Api.Controllers
 {
     [Route("[controller]")]
-    public class UsersController : Controller
+
+    public class UsersController : ApiControllerBase
     {
         private readonly IUserService _userService;
-        private readonly ICommandDispatcher _commandDispatcher;
-
-        public UsersController(IUserService userService, ICommandDispatcher commandDispatcher )
+        public UsersController(IUserService userService,
+            ICommandDispatcher commandDispatcher) : base(commandDispatcher)
         {
+
             _userService = userService;
-            _commandDispatcher = commandDispatcher;
         }
 
         [HttpGet("{email}")]
@@ -34,12 +34,10 @@ namespace Passenger.Api.Controllers
         }
 
         [HttpPost("")]
-        public async Task<IActionResult> Post([FromBody] CreateUser command)
+        public async Task<IActionResult> Create([FromBody] CreateUser command)
         {
-            //await _userService.RegisterAsync(command.Email, command.UserName, command.Password);
-
-            // użycie Autofac
-            await _commandDispatcher.DispatcherAsync(command);  
+            //await _userService.RegisterAsync(request.Email, request.UserName, request.Password);
+            await CommandDispatcher.DispatchAsync(command);
 
             return Created($"users/{command.Email}", new object());
         }
