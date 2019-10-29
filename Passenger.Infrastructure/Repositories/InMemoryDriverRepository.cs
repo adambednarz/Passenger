@@ -11,9 +11,7 @@ namespace Passenger.Infrastructure.Repositories
     public class InMemoryDriverRepository : IDriverRepository
     {
         private static readonly ISet<Driver> _drivers = new HashSet<Driver>
-            {
-                new Driver("Focus"),
-            };
+            {};
 
         public async Task AddAsync(Driver driver)
         {
@@ -21,8 +19,8 @@ namespace Passenger.Infrastructure.Repositories
             await Task.CompletedTask;
         }
 
-        public Driver Get(Guid userId)
-            => _drivers.SingleOrDefault(x => x.UserId == userId);
+        public async Task<Driver> GetAsync(Guid userId)
+            => await Task.FromResult(_drivers.SingleOrDefault(x => x.UserId == userId));
         
 
         public IEnumerable<Driver> GetAll()
@@ -33,6 +31,11 @@ namespace Passenger.Infrastructure.Repositories
         {
            // throw new NotImplementedException();
             await Task.CompletedTask;
+        }
+
+        Task<Driver> IDriverRepository.GetAsync(Guid userId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

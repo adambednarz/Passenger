@@ -5,6 +5,7 @@ using Passenger.Infrastructure.DTO;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Passenger.Infrastructure.Services
 {
@@ -18,9 +19,9 @@ namespace Passenger.Infrastructure.Services
             _driverRepository = driverRepository;
             _mapper = mapper;
         }
-        public DriverDto Get(Guid userId)
+        public async Task<DriverDto> GetAsync(Guid userId)
         {
-            var driver = _driverRepository.Get(userId);
+            var driver = await _driverRepository.GetAsync(userId);
             return _mapper.Map<Driver, DriverDto>(driver);
         }
 

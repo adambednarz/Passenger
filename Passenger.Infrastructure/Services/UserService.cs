@@ -3,8 +3,6 @@ using Passenger.Core.Domain;
 using Passenger.Core.Repositories;
 using Passenger.Infrastructure.DTO;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Passenger.Infrastructure.Services
@@ -13,10 +11,14 @@ namespace Passenger.Infrastructure.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        public UserService(IUserRepository userRepositiry, IMapper mapper)
+        private readonly IEncrypter _encrypter;
+
+        public UserService(IUserRepository userRepositiry,
+            IEncrypter encrypter, IMapper mapper)
         {
             _userRepository = userRepositiry;
             _mapper = mapper;
+            _encrypter = encrypter;
         }
 
         public async Task<UserDto> GetAsync(string email)
@@ -35,6 +37,26 @@ namespace Passenger.Infrastructure.Services
             //};
         }
 
+        public async Task LoginAsync(string email, string password)
+        {
+            var user = await _userRepository.GetAsync(email);
+            if (user == null)
+            {
+                throw new Exception("Invalid credentioal");
+
+            }
+
+            var salt = _encrypter.GetSalt(password);
+            var hash = _encrypter.GetHash(password, salt);
+            if (user.Password == hash)
+            {
+                //var CorrectPassword = true;
+                return;
+            }
+            throw new Exception("Invalid credentioal");
+
+        }
+
         public async Task  RegisterAsync(string email, string userName, string password)
         {
             var user = await _userRepository.GetAsync(email);
@@ -43,8 +65,11 @@ namespace Passenger.Infrastructure.Services
                 throw new Exception($"User with email: '{email}' already exist.");
             }
 
-            var salt = Guid.NewGuid().ToString("N");
-            user = new User(email, userName, password);
+            //var salt = Guid.NewGuid().ToString("N");          <-- implementacja bez Iencryptera
+            var salt = _encrypter.GetSalt(password);
+            var hash = _encrypter.GetHash(password, salt);
+            //user = new User(email, userName, password);      <-- implementacja bez Iencryptera
+            user = new User(email, userName, hash);
             await _userRepository.AddAsync(user);
           //  user = new User() 
         }

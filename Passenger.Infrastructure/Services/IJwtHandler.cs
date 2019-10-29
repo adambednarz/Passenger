@@ -2,12 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Passenger.Infrastructure.Services
 {
-    public interface IDriverService : IService
+    public interface IJwtHandler
     {
-        Task<DriverDto> GetAsync(Guid userId);
+        JwtDto CreateToken(string email);
     }
 }
