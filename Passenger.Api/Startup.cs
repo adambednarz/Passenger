@@ -11,6 +11,7 @@ using Passenger.Infrastructure.IoC.Modules;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Passenger.Infrastructure.Settings;
 
 namespace Passenger.Api
 {
@@ -34,7 +35,7 @@ namespace Passenger.Api
 
 
         //This method gets called by the runtime.Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services/*, IApplicationBuilder app*/)
         {
                             // \/ zostały dla nich stworzone marker interfejsy a następnie moduły,
                             //które dodane zostały do kontynera w klasie Container module 
@@ -46,7 +47,8 @@ namespace Passenger.Api
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // JWT
-                services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+           // var jwtSettings = app.ApplicationServices.GetService<JwtSettings>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
               .AddJwtBearer(options =>
               {
                   options.TokenValidationParameters = new TokenValidationParameters
@@ -55,10 +57,15 @@ namespace Passenger.Api
                       ValidateAudience = false,
                       ValidateLifetime = true,
                       ValidateIssuerSigningKey = true,
-                      ValidIssuer = Configuration["Jwt:Issuer"],
+                                ValidIssuer = Configuration["Tokens:Issuer"],
+                      //ValidIssuer = jwtSettings.Issuer,
                       ValidAudience = Configuration["Jwt:Issuer"],
-                      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"])),
+                      //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
+
+                      ClockSkew = TimeSpan.Zero
                   };
+                  options.RequireHttpsMetadata = false;
               });
 
             var builder = new ContainerBuilder();
