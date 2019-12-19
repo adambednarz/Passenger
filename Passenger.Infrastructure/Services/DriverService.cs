@@ -20,8 +20,8 @@ namespace Passenger.Infrastructure.Services
         }
         public DriverDto Get(Guid userId)
         {
-            var driver = _driverRepository.Get(userId);
-            return _mapper.Map<Driver, DriverDto>(driver);
+            var driver = _driverRepository.GetAsync(userId);
+            return _mapper.Map<DriverDto>(driver);
         }
 
 

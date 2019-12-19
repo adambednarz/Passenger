@@ -12,9 +12,9 @@ namespace Passenger.Infrastructure.Repositories
     {
         private static readonly ISet<User> _users = new HashSet<User>
         {
-            new User("user1@email.com", "user1", "secret"),
-            new User("user2@email.com", "user2", "secret"),
-            new User("user3@email.com", "user3", "secret")
+            new User(Guid.NewGuid(), "user1@email.com", "user1", "secret", "user"),
+            new User(Guid.NewGuid(), "user2@email.com", "user2", "secret", "user"),
+            new User(Guid.NewGuid(), "user3@email.com", "user3", "secret", "user")
         };
         
 
@@ -26,23 +26,25 @@ namespace Passenger.Infrastructure.Repositories
 
         public async Task<IEnumerable<User>> GetAllAsync()
         => await Task.FromResult(_users);
+
         public async Task AddAsync(User user)
         {
             _users.Add(user);
             await Task.CompletedTask;
         }
 
-        public async Task RemoveAsync(Guid id)
+        public async Task RemoveAsync(User user)
         {
-            var user = await GetAsync(id);
-             _users.Remove(user);
+            _users.Remove(user);
             await Task.CompletedTask;
         }
         
 
         public async Task UpdateAsync(User user)
         {
-            await Task.CompletedTask;
+            var oldUser = await Task.FromResult(_users.First(x => x.Id == user.Id));
+            _users.Remove(oldUser);
+            _users.Add(user);
         }
     }
 }

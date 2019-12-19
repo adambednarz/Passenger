@@ -13,10 +13,16 @@ namespace Passenger.Infrastructure.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        public UserService(IUserRepository userRepositiry, IMapper mapper)
+        private readonly IJwtHandler _jwtHandler;
+        private readonly IEncrypter _encrypter;
+
+        public UserService(IUserRepository userRepositiry, IEncrypter encrypter,
+            IMapper mapper, IJwtHandler jwtHandler)
         {
             _userRepository = userRepositiry;
             _mapper = mapper;
+            _jwtHandler = jwtHandler;
+            _encrypter = encrypter;
         }
 
         public async Task<UserDto> GetAsync(string email)
@@ -35,7 +41,33 @@ namespace Passenger.Infrastructure.Services
             //};
         }
 
-        public async Task  RegisterAsync(string email, string userName, string password)
+        public async Task<TokenDto> LoginAsync(string email, string password)
+        {
+            var user = await _userRepository.GetAsync(email);
+            if (user == null)
+            {
+                throw new Exception("Invalid credentials");
+            }
+
+            var salt = _encrypter.GetSalt(password);
+            var hash = _encrypter.GetHash(password, salt);
+          
+            if(user.Password != hash)
+            {
+                throw new Exception("Invalid credentials"); 
+            }
+
+            var jwt = _jwtHandler.CreateToken(user.Id, user.Role);
+
+            return new TokenDto
+            {
+                Token = jwt.Token,
+                Expires = jwt.Expires,
+                Role = user.Role
+            };
+        }
+
+        public async Task  RegisterAsync(Guid id, string email, string userName, string password, string role)
         {
             var user = await _userRepository.GetAsync(email);
             if (user != null)
@@ -43,8 +75,9 @@ namespace Passenger.Infrastructure.Services
                 throw new Exception($"User with email: '{email}' already exist.");
             }
 
-            var salt = Guid.NewGuid().ToString("N");
-            user = new User(email, userName, password);
+            var salt = _encrypter.GetSalt(password);
+            var hash = _encrypter.GetHash(password, salt);
+            user = new User(id, email, userName, hash, role);
             await _userRepository.AddAsync(user);
           //  user = new User() 
         }

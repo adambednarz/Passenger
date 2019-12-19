@@ -1,9 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Octokit.Internal;
 using Passenger.Infrastructure.Commands;
 using Passenger.Infrastructure.Commands.Users;
 using Passenger.Infrastructure.Services;
-
+using Passenger.Infrastructure.Settings;
 
 namespace Passenger.Api.Controllers
 {
@@ -12,10 +14,11 @@ namespace Passenger.Api.Controllers
     public class UsersController : ApiControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IConfiguration _config;
+
         public UsersController(IUserService userService,
             ICommandDispatcher commandDispatcher) : base(commandDispatcher)
         {
-
             _userService = userService;
         }
 
