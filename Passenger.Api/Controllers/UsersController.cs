@@ -14,7 +14,6 @@ namespace Passenger.Api.Controllers
     public class UsersController : ApiControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IConfiguration _config;
 
         public UsersController(IUserService userService,
             ICommandDispatcher commandDispatcher) : base(commandDispatcher)

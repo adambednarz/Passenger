@@ -22,12 +22,10 @@ namespace Passenger.Infrastructure.IoC.Modules
                 .AsClosedTypesOf(typeof(ICommandHandler<>))
                 .InstancePerLifetimeScope();
             //----------------------------------------------
-            //powyższ metoda zrobi za nas dokładnie to (dla wszystkich CommandHandlerów
+            //powyższa metoda zrobi za nas dokładnie to (dla wszystkich CommandHandlerów
             builder.RegisterType<CreateUserHandler>()
              .As<ICommandHandler<CreateUser>>()
              .InstancePerLifetimeScope();
-
-
 
             builder.RegisterType<CommandDispatcher>()
                 .As<ICommandDispatcher>()

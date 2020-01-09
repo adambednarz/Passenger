@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using FluentAssertions;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+using Newtonsoft.Json;
 using Passenger.Api;
+using Passenger.Infrastructure.DTO;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,9 +27,25 @@ namespace Passenger.Tests.EndToEnd.Controllers
         }
 
         [Fact]
-        public async Task given_valid_user_should_exist()
+        public async Task CanGetExistingUserByEmail()
         {
             var email = "user1@email.com";
+            var response = await _client.GetAsync($"users/{email}");
+            response.EnsureSuccessStatusCode();
+
+            var responseString = await response.Content.ReadAsStringAsync();
+            var user = JsonConvert.DeserializeObject<UserDto>(responseString);
+
+            user.Email.Should().BeEquivalentTo(email);
+        }
+
+        [Fact]
+        public async Task GettingNonexistingUser_ReturnNotfound()
+        {
+            var email = "bademail";
+            var response = await _client.GetAsync($"users/{email}");
+
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
     }
 }

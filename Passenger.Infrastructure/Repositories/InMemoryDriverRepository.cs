@@ -10,7 +10,7 @@ namespace Passenger.Infrastructure.Repositories
 {
     public class InMemoryDriverRepository : IDriverRepository
     {
-        private static ISet<Driver> _drivers = new HashSet<Driver>();
+        private static readonly ISet<Driver> _drivers = new HashSet<Driver>();
 
         public async Task AddAsync(Driver driver)
             => await Task.FromResult(_drivers.Add(driver));

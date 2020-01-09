@@ -19,13 +19,13 @@ namespace Passenger.Api
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        public IContainer ApplicationContainer { get; private set; }
+        public IContainer Container { get; private set; }
 
         public Startup(IHostingEnvironment env /*IConfiguration configuration, IContainer appContainer*/)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
 
@@ -48,14 +48,15 @@ namespace Passenger.Api
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
-
+            //builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
+            //Container = builder.Build();
             // \/ wydelegowanie do Containermodule
             //builder.RegisterModule<CommandModule>();
             //builder.RegisterModule(new SettingsModule(Configuration));
             builder.RegisterModule(new ContainerModule(Configuration));
-            ApplicationContainer = builder.Build();
+            Container = builder.Build();
 
-            return new AutofacServiceProvider(ApplicationContainer);
+            return new AutofacServiceProvider(Container);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,7 +75,7 @@ namespace Passenger.Api
             
             app.UseHttpsRedirection();
             app.UseMvc();
-            applicationLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
+            applicationLifetime.ApplicationStopped.Register(() => Container.Dispose());
         }
     }
 }
