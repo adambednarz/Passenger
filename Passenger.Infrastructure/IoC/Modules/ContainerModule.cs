@@ -24,7 +24,6 @@ namespace Passenger.Infrastructure.IoC.Modules
             builder.RegisterModule(new SettingsModule(_configuration));
             builder.RegisterInstance(AutoMapperConfig.Initialize())
                 .SingleInstance();
-
         }
     }
 }

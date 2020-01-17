@@ -1,10 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Newtonsoft.Json;
+using Passenger.Infrastructure.Commands.Users;
+using Passenger.Infrastructure.DTO;
+using System.Net;
+using System.Threading.Tasks;
+using Xunit;
+using FluentAssertions;
 
 namespace Passenger.Tests.EndToEnd.Controllers
 {
-    class AccountControllerTests
+    public class AccountControllerTests : ControllerTestsBase
     {
+        [Fact]
+        public async Task given_valid_current_and_new_password_it_should_be_changed()
+        {
+            var command = new ChangeUserPassword
+            {
+                CurrentPassword = "secret",
+                NewPassword = "newSecret"
+            };
+
+            var payload = GetPayload(command);
+            var response = await Client.PutAsync("account/password", payload);
+            response.StatusCode.Should().BeEquivalentTo(HttpStatusCode.NoContent);
+        }
     }
 }

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Passenger.Infrastructure.Settings;
+using Newtonsoft.Json;
 
 namespace Passenger.Api
 {
@@ -20,7 +21,7 @@ namespace Passenger.Api
         public IConfiguration Configuration { get; }
         public IContainer ApplicationContainer { get; private set; }
 
-        public Startup(IHostingEnvironment env /*IConfiguration configuration, IContainer appContainer*/)
+        public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -29,51 +30,44 @@ namespace Passenger.Api
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
-                            //ApplicationContainer = appContainer;
         }
-
-
-
-        //This method gets called by the runtime.Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services/*, IApplicationBuilder app*/)
+      
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-                            // \/ zostały dla nich stworzone marker interfejsy a następnie moduły,
-                            //które dodane zostały do kontynera w klasie Container module 
-                            //services.AddScoped<IUserRepository, InMemoryUserRepository>();
-                            //services.AddScoped<IUserService, UserService>();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddJsonOptions(x => x.SerializerSettings.Formatting = Formatting.Indented);
 
-                            // \/ wydelegowane do ContainerModule
-                            //services.AddSingleton(AutoMapperConfig.Initialize());
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            // ===== Add Jwt Authentication ========
+            var jwtSettingsSection = Configuration.GetSection("Jwt");
+            services.Configure<JwtSettings>(jwtSettingsSection);
 
-            // JWT
-           // var jwtSettings = app.ApplicationServices.GetService<JwtSettings>();
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-              .AddJwtBearer(options =>
-              {
-                  options.TokenValidationParameters = new TokenValidationParameters
-                  {
-                      ValidateIssuer = true,
-                      ValidateAudience = false,
-                      ValidateLifetime = true,
-                      ValidateIssuerSigningKey = true,
-                                ValidIssuer = Configuration["Tokens:Issuer"],
-                      //ValidIssuer = jwtSettings.Issuer,
-                      ValidAudience = Configuration["Jwt:Issuer"],
-                                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"])),
-                      //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
+            var jwtSettings = jwtSettingsSection.Get<JwtSettings>();
+            var key = Encoding.ASCII.GetBytes(jwtSettings.Key);
 
-                      ClockSkew = TimeSpan.Zero
-                  };
-                  options.RequireHttpsMetadata = false;
-              });
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            })
+            .AddJwtBearer(cfg =>
+            {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings.Issuer,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                };
+            });
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
-
-                            // \/ wydelegowanie do Containermodule
-                            //builder.RegisterModule<CommandModule>();
-                            //builder.RegisterModule(new SettingsModule(Configuration));
             builder.RegisterModule(new ContainerModule(Configuration));
             ApplicationContainer = builder.Build();
 
@@ -81,22 +75,16 @@ namespace Passenger.Api
         }
 
 
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,
-            IApplicationLifetime applicationLifetime/*, ILoggerFactory loggerFactory*/)
+            IApplicationLifetime applicationLifetime)
         {
-
-                            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-                            //loggerFactory.AddDebug();
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             else
-            {
-                            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            {             
                 app.UseHsts();
             }
 

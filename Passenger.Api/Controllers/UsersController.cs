@@ -12,7 +12,6 @@ using Passenger.Infrastructure.Services;
 namespace Passenger.Api.Controllers
 {
     [Route("[controller]")]
-
     public class UsersController : ApiControllerBase
     {
         private readonly IUserService _userService;
@@ -22,7 +21,7 @@ namespace Passenger.Api.Controllers
 
             _userService = userService;
         }
-        [Authorize]
+
         [HttpGet("{email}")]
         public async Task<IActionResult> Get(string email)
         {
@@ -37,7 +36,6 @@ namespace Passenger.Api.Controllers
         [HttpPost("")]
         public async Task<IActionResult> Create([FromBody] CreateUser command)
         {
-            //await _userService.RegisterAsync(request.Email, request.UserName, request.Password);
             await CommandDispatcher.DispatchAsync(command);
 
             return Created($"users/{command.Email}", new object());
