@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Passenger.Core.Repositories
+﻿namespace Passenger.Core.Repositories
 {
-    public interface IRepository // marker interface
+    public interface IRepository // marker interface used in Autofac and reflection 
     {
     }
 }

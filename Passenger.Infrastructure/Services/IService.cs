@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Passenger.Infrastructure.Services
 {
-    public interface IService // Mark Interface
+    public interface IService // Marker Interface
     {
     }
 }

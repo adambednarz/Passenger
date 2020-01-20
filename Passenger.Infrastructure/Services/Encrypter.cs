@@ -1,8 +1,6 @@
 ﻿using Passenger.Infrastructure.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace Passenger.Infrastructure.Services
 {

@@ -3,8 +3,6 @@ using Passenger.Core.Domain;
 using Passenger.Core.Repositories;
 using Passenger.Infrastructure.DTO;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Passenger.Infrastructure.Services
@@ -24,7 +22,5 @@ namespace Passenger.Infrastructure.Services
             var driver = await _driverRepository.GetAsync(userId);
             return _mapper.Map<Driver, DriverDto>(driver);
         }
-
-
     }
 }

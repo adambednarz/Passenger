@@ -3,7 +3,6 @@ using Passenger.Core.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Passenger.Infrastructure.Repositories
@@ -29,7 +28,6 @@ namespace Passenger.Infrastructure.Repositories
 
         public async Task UpdateAsync(Driver driver)
         {
-           // throw new NotImplementedException();
             await Task.CompletedTask;
         }
 

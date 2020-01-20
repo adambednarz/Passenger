@@ -6,13 +6,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
-using Passenger.Infrastructure.IoC.Modules;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Passenger.Infrastructure.Settings;
 using Newtonsoft.Json;
+using Passenger.Infrastructure.IoC;
 
 namespace Passenger.Api
 {
@@ -66,6 +65,7 @@ namespace Passenger.Api
                 };
             });
 
+            // ===== IoC - Autofac ========
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterModule(new ContainerModule(Configuration));

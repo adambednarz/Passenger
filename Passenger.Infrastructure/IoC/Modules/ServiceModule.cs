@@ -8,7 +8,6 @@ namespace Passenger.Infrastructure.IoC.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            // Automatyczne prześwietla katalog Interface
             var assembly = typeof(ServiceModule)
                 .GetTypeInfo()
                 .Assembly;
@@ -22,11 +21,9 @@ namespace Passenger.Infrastructure.IoC.Modules
                 .As<IEncrypter>()
                 .SingleInstance();
 
-
             builder.RegisterType<JwtHandler>()
                 .As<IJwtHandler>()
                 .SingleInstance();
-            //----------------------------------------------
         }
     }
 }

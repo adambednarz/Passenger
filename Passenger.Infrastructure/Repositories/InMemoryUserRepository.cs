@@ -38,7 +38,6 @@ namespace Passenger.Infrastructure.Repositories
              _users.Remove(user);
             await Task.CompletedTask;
         }
-        
 
         public async Task UpdateAsync(User user)
         {

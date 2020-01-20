@@ -12,6 +12,7 @@ namespace Passenger.Infrastructure.IoC.Modules
         {
             _configuration = configuration;
         }
+
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterInstance(_configuration.GetSettings<GeneralSettings>())

@@ -14,6 +14,5 @@ namespace Passenger.Core.Domain
         {
             UserId = user.Id;
         }
-
     }
 }

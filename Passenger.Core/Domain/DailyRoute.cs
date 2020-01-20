@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Passenger.Core.Domain
 {
@@ -19,18 +18,18 @@ namespace Passenger.Core.Domain
 
         public void AddPassengerNode(Passenger passenger, Node node)
         {
-            var passengerNodeDB = Get(passenger);
-            if(passengerNodeDB != null)
+            var passengerNode = GetPassengerNode(passenger);
+            if(passengerNode != null)
             {
                 throw new InvalidOperationException($"Node actually exist for passenger {passenger.UserId}");
             }
-                var passengerNode = PassengerNode.Create(passenger, node);
-                _passengerNodes.Add(passengerNode);
+
+            _passengerNodes.Add(PassengerNode.Create(passenger, node));
         }
 
         public void RemovePassengerNode(Passenger passenger)
         {
-            var passengerNodeDB = Get(passenger);
+            var passengerNodeDB = GetPassengerNode(passenger);
             if (passengerNodeDB == null)
             {
                 return;
@@ -38,7 +37,7 @@ namespace Passenger.Core.Domain
             _passengerNodes.Remove(passengerNodeDB);
         }
 
-        public PassengerNode Get(Passenger passenger)
+        public PassengerNode GetPassengerNode(Passenger passenger)
         => _passengerNodes.SingleOrDefault(x => x.Passenger.UserId == passenger.UserId);
     }
 }

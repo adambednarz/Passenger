@@ -98,6 +98,5 @@ namespace Passenger.Core.Domain
             }
             Salt = salt;
         }
-
     }
 }

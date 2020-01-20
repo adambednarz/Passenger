@@ -8,7 +8,6 @@ namespace Passenger.Infrastructure.IoC.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            // Automatyczne prześwietla katalogi 
             var assembly = typeof(UsersController)
                 .GetTypeInfo()
                 .Assembly;
@@ -17,7 +16,6 @@ namespace Passenger.Infrastructure.IoC.Modules
                 .Where(x => x.IsAssignableTo<IRepository>())
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
-            //----------------------------------------------
         }
     }
 }

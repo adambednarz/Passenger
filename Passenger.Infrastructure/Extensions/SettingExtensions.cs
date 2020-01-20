@@ -12,6 +12,5 @@ namespace Passenger.Infrastructure.Extensions
 
             return configurationValue;
         }
-
     }
 }

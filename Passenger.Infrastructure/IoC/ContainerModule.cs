@@ -1,13 +1,9 @@
 ﻿using Autofac;
 using Microsoft.Extensions.Configuration;
-using Passenger.Infrastructure.Extensions;
+using Passenger.Infrastructure.IoC.Modules;
 using Passenger.Infrastructure.Mappers;
-using Passenger.Infrastructure.Settings;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Passenger.Infrastructure.IoC.Modules
+namespace Passenger.Infrastructure.IoC
 {
     public class ContainerModule : Autofac.Module
     {
@@ -23,7 +19,7 @@ namespace Passenger.Infrastructure.IoC.Modules
             builder.RegisterModule<ServiceModule>();
             builder.RegisterModule(new SettingsModule(_configuration));
             builder.RegisterInstance(AutoMapperConfig.Initialize())
-                .SingleInstance();
+                   .SingleInstance();
         }
     }
 }
