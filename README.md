@@ -2,7 +2,7 @@
 Building the first serious application following the course of Piotr Gankiewicz (link to the course at the end)
 
 ## Getting Started
-The repository contains application created in Visual Studio Code 2017 with C# (.Net Core) technology.
+The repository contains application created in Visual Studio Code 2019 with C# (.Net Core) technology.
 
 ## What is Passenger?
 
@@ -31,12 +31,14 @@ The entire application is build from 5 different projects (using onion architect
 * Autofac
 * CommandHandler & CommandDispatcher
 * JWT
+* xUnit
 
 ## What do I still miss here and what will I add in future?
 
 It is not a complete application. There is still a lot missing in it. Below I will give you some things that I would like to add in the near future:
 
-* more, more and more TESTS!!!
+* Connection with SQL and NoSQL database.
+* More, more and more TESTS!
 * More Controllers
 * More connections  and couplings between domain classes
 
