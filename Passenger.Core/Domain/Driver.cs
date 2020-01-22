@@ -24,9 +24,9 @@ namespace Passenger.Core.Domain
             UpdatedAt = DateTime.Now;
         }
 
-        public void SetVehicle(string brand, string name, int seats)
+        public void SetVehicle(Vehicle vehicle)
         {
-            Vehicle = Vehicle.Create(brand, name, seats);
+            Vehicle = vehicle;
             UpdatedAt = DateTime.Now;
         }
 

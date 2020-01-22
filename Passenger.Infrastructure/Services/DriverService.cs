@@ -14,13 +14,15 @@ namespace Passenger.Infrastructure.Services
         private readonly IDriverRepository _driverRepository;
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
+        private readonly IVehicleProvider _vehicleProvider;
 
         public DriverService(IDriverRepository driverRepository, IMapper mapper, 
-            IUserRepository userRepository)
+            IUserRepository userRepository, IVehicleProvider vehicleProvider)
         {
             _driverRepository = driverRepository;
             _mapper = mapper;
             _userRepository = userRepository;
+            _vehicleProvider = vehicleProvider;
         }
         
         public async Task<IEnumerable<DriverDto>> BrowseAsync()
@@ -49,13 +51,15 @@ namespace Passenger.Infrastructure.Services
             await _driverRepository.AddAsync(driver);
         }
 
-        public async Task AddVehicleAsync(Guid userId, string brand, string name, int seats)
+        public async Task AddVehicleAsync(Guid userId, string brand, string model)
         {
             var driver = await _driverRepository.GetAsync(userId);
             if (driver == null)
                 throw new Exception($"Driver with id: '{userId}' does not exist");
 
-            driver.SetVehicle(brand, name, seats);
+            var vehicleDetails = await _vehicleProvider.GetAsync(brand, model);
+            var vehicle =Vehicle.Create(vehicleDetails.Brand, vehicleDetails.Model, vehicleDetails.Seats);
+            driver.SetVehicle(vehicle);
             await _driverRepository.UpdateAsync(driver);
         }
     }

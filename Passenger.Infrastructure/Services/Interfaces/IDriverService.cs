@@ -11,6 +11,6 @@ namespace Passenger.Infrastructure.Services.Interfaces
         Task<IEnumerable<DriverDto>> BrowseAsync();
         Task<DriverDto> GetAsync(Guid userId);
         Task CreateAsync(Guid userId);
-        Task AddVehicleAsync(Guid userId, string brand, string name, int seats);
+        Task AddVehicleAsync(Guid userId, string brand, string name);
     }
 }

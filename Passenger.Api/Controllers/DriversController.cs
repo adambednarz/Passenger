@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Passenger.Infrastructure.Commands;
 using Passenger.Infrastructure.Commands.Drivers;
-using Passenger.Infrastructure.Services;
 using Passenger.Infrastructure.Services.Interfaces;
 
 namespace Passenger.Api.Controllers

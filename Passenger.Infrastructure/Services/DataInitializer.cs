@@ -31,7 +31,7 @@ namespace Passenger.Infrastructure.Services
                 var userId = Guid.NewGuid();
                 tasks.Add(_userService.RegisterAsync(userId, $"user{i + 1}@email.com", $"User{i + 1}", "password"));
                 tasks.Add(_driverService.CreateAsync(userId));
-                tasks.Add(_driverService.AddVehicleAsync(userId, "BMW", "X5", 5));
+                tasks.Add(_driverService.AddVehicleAsync(userId, "BMW", "X5"));
             }
             for (int i = 0; i < 3; i++)
             {

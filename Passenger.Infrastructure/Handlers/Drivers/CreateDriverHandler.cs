@@ -21,7 +21,7 @@ namespace Passenger.Infrastructure.Handlers.Drivers
         {
             await _driverService.CreateAsync(command.UserId);
             await _driverService.AddVehicleAsync(command.UserId, command.VehicleBrand, 
-                command.VehicleName, command.VehicleSeats);
+                command.VehicleName);
         }
     }
 }
