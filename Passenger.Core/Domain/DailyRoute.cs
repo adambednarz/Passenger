@@ -6,7 +6,7 @@ namespace Passenger.Core.Domain
 {
     public class DailyRoute
     {
-        private ISet<PassengerNode> _passengerNodes = new HashSet<PassengerNode>();
+        private readonly ISet<PassengerNode> _passengerNodes = new HashSet<PassengerNode>();
         public Guid Id { get; protected set; }
         public Route Route { get; protected set; }
         public IEnumerable<PassengerNode> PassengerNodes => _passengerNodes;

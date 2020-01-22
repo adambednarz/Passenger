@@ -9,7 +9,6 @@ namespace Passenger.Api.Controllers
         public ApiControllerBase(ICommandDispatcher commandDispatcher)
         {
             CommandDispatcher = commandDispatcher;
-
         }
     }
 }

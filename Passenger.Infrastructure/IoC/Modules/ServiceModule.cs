@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Passenger.Infrastructure.Services;
+using Passenger.Infrastructure.Services.Interfaces;
 using System.Reflection;
 
 namespace Passenger.Infrastructure.IoC.Modules

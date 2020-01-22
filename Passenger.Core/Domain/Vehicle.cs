@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Passenger.Core.Domain
 {
     public class Vehicle    // ValueObject -> imutable
     {
         public string Brand { get; protected set; }
-        public string Name { get; protected set; }
+        public string Model { get; protected set; }
         public int Seats { get; protected set; }
 
         protected Vehicle()
@@ -42,11 +40,11 @@ namespace Passenger.Core.Domain
             {
                 throw new Exception("Please provie valid data.");
             }
-            if (Name == name)
+            if (Model == name)
             {
                 return;
             }
-            Name = name;
+            Model= name;
         }
 
         private void SetSeats(int seats)

@@ -9,8 +9,7 @@ namespace Passenger.Infrastructure.Repositories
 {
     public class InMemoryDriverRepository : IDriverRepository
     {
-        private static readonly ISet<Driver> _drivers = new HashSet<Driver>
-            {};
+        private static readonly ISet<Driver> _drivers = new HashSet<Driver>();
 
         public async Task AddAsync(Driver driver)
         {
@@ -20,20 +19,13 @@ namespace Passenger.Infrastructure.Repositories
 
         public async Task<Driver> GetAsync(Guid userId)
             => await Task.FromResult(_drivers.SingleOrDefault(x => x.UserId == userId));
-        
 
-        public IEnumerable<Driver> GetAll()
-            => _drivers;
-
+        public async Task<IEnumerable<Driver>> BrowseAsync()
+            =>await Task.FromResult(_drivers);
 
         public async Task UpdateAsync(Driver driver)
         {
             await Task.CompletedTask;
-        }
-
-        Task<Driver> IDriverRepository.GetAsync(Guid userId)
-        {
-            throw new NotImplementedException();
         }
     }
 }

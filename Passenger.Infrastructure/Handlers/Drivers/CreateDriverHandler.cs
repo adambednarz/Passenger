@@ -1,6 +1,7 @@
 ﻿using Passenger.Infrastructure.Commands;
 using Passenger.Infrastructure.Commands.Drivers;
 using Passenger.Infrastructure.Services;
+using Passenger.Infrastructure.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,7 +19,9 @@ namespace Passenger.Infrastructure.Handlers.Drivers
         }
         public async Task HandleAsync(CreateDriver command)
         {
-            throw new NotImplementedException();
+            await _driverService.CreateAsync(command.UserId);
+            await _driverService.AddVehicleAsync(command.UserId, command.VehicleBrand, 
+                command.VehicleName, command.VehicleSeats);
         }
     }
 }

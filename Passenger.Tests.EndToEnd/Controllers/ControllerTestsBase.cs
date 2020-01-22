@@ -21,10 +21,10 @@ namespace Passenger.Tests.EndToEnd.Controllers
             Client = Server.CreateClient();
         }
 
+
         protected static StringContent GetPayload(object data)
         {
             var json = JsonConvert.SerializeObject(data);
-
             return new StringContent(json, Encoding.UTF8, "application/json");
         }
     }

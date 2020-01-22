@@ -12,6 +12,7 @@ using System.Text;
 using Passenger.Infrastructure.Settings;
 using Newtonsoft.Json;
 using Passenger.Infrastructure.IoC;
+using Passenger.Infrastructure.Services.Interfaces;
 
 namespace Passenger.Api
 {
@@ -35,6 +36,7 @@ namespace Passenger.Api
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonOptions(x => x.SerializerSettings.Formatting = Formatting.Indented);
+            services.AddMemoryCache();
 
             // ===== Add Jwt Authentication ========
             var jwtSettingsSection = Configuration.GetSection("Jwt");
@@ -86,6 +88,13 @@ namespace Passenger.Api
             else
             {             
                 app.UseHsts();
+            }
+
+            var dataSettings = app.ApplicationServices.GetService<DataInitializerSettings>();
+            if(dataSettings.Seed)
+            {
+                var dataInitializer = app.ApplicationServices.GetService<IDataInitializer>();
+                dataInitializer.SeedAsync();
             }
 
             app.UseAuthentication();

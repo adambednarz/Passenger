@@ -9,7 +9,9 @@
     <PackageReference Include="Autofac" Version="4.9.4" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="AutoMapper" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0" >
+      <AllowExplicitVersion>true</AllowExplicitVersion>
+    </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />

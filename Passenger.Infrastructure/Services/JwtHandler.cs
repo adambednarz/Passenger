@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Passenger.Infrastructure.DTO;
 using Passenger.Infrastructure.Extensions;
+using Passenger.Infrastructure.Services.Interfaces;
 using Passenger.Infrastructure.Settings;
 
 namespace Passenger.Infrastructure.Services

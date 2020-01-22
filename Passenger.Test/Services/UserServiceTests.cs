@@ -9,6 +9,7 @@ using Moq;
 using Passenger.Infrastructure.Services;
 using AutoMapper;
 using Passenger.Core.Domain;
+using Passenger.Infrastructure.Services.Interfaces;
 
 namespace Passenger.Tests.Services
 {
@@ -24,7 +25,7 @@ namespace Passenger.Tests.Services
             var mapperMock = new Mock<IMapper>();
 
             var userService = new UserService(userRepositoryMock.Object, encrypterMock.Object, mapperMock.Object);
-            await userService.RegisterAsync("user@email.com", "user1", "secret");
+            await userService.RegisterAsync(Guid.NewGuid(), "user@email.com", "user1", "secret");
 
             userRepositoryMock.Verify(x => x.AddAsync(It.IsAny<User>()), Times.Once);
         }
@@ -39,7 +40,7 @@ namespace Passenger.Tests.Services
             var userService = new UserService(userRepositoryMock.Object, encrypterMock.Object, mapperMock.Object);
             await userService.GetAsync("user1@email.com");
 
-            var user = new User("user1@email.com", "user1", "secret");
+            var user = new User(Guid.NewGuid(), "user1@email.com", "user1", "secret");
 
             userRepositoryMock.Verify(x => x.GetAsync(It.IsAny<string>()), Times.Once);
         }

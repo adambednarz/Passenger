@@ -1,4 +1,5 @@
 ﻿using Passenger.Infrastructure.Extensions;
+using Passenger.Infrastructure.Services.Interfaces;
 using System;
 using System.Security.Cryptography;
 
