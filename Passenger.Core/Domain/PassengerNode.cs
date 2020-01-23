@@ -12,6 +12,7 @@ namespace Passenger.Core.Domain
         protected PassengerNode()
         {
         }
+
         protected PassengerNode(Passenger passenger, Node node)
         {
             Passenger = passenger;

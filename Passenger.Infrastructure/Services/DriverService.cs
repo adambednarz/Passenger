@@ -31,10 +31,10 @@ namespace Passenger.Infrastructure.Services
             return _mapper.Map<IEnumerable<DriverDto>>(drivers);
         } 
 
-        public async Task<DriverDto> GetAsync(Guid userId)
+        public async Task<DriverDetailsDto> GetAsync(Guid userId)
         {
             var driver = await _driverRepository.GetAsync(userId);
-            return _mapper.Map<Driver, DriverDto>(driver);
+            return _mapper.Map<Driver, DriverDetailsDto>(driver);
         }
 
         public async Task CreateAsync(Guid userId)

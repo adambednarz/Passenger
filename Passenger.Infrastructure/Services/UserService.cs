@@ -47,14 +47,13 @@ namespace Passenger.Infrastructure.Services
             var hash = _encrypter.GetHash(password, user.Salt);
             if (user.Password == hash)
             {
-                //var CorrectPassword = true;
                 return;
             }
             throw new Exception("Invalid credentioal");
-
         }
 
-        public async Task  RegisterAsync(Guid userId, string email, string userName, string password)
+        public async Task  RegisterAsync(Guid userId, string email, 
+            string userName, string role, string password)
         {
             var user = await _userRepository.GetAsync(email);
             if (user != null)
@@ -62,11 +61,9 @@ namespace Passenger.Infrastructure.Services
                 throw new Exception($"User with email: '{email}' already exist.");
             }
 
-            //var salt = Guid.NewGuid().ToString("N");          <-- implementacja bez Iencryptera
             var salt = _encrypter.GetSalt(password);
             var hash = _encrypter.GetHash(password, salt);
-            //user = new User(email, userName, password);      <-- implementacja bez Iencryptera
-            user = new User(userId, email, userName, hash);
+            user = new User(userId, email, userName, role, hash, salt);
             await _userRepository.AddAsync(user);
           //  user = new User() 
         }

@@ -10,6 +10,7 @@ using Passenger.Infrastructure.Extensions;
 
 namespace Passenger.Api.Controllers
 {
+    [Route("[controller]")]
     public class LoginController : ApiControllerBase
     {
         private readonly IMemoryCache _cache;
@@ -24,7 +25,7 @@ namespace Passenger.Api.Controllers
         public async Task<IActionResult> Post([FromBody] Login command)
         {
             command.TokenId = Guid.NewGuid();
-            await CommandDispatcher.DispatchAsync(command);
+            await DispatchAsync(command);
             var jwt = _cache.GetJwt(command.TokenId);
 
             return Json(jwt);

@@ -19,15 +19,13 @@ namespace Passenger.Tests.EndToEnd.Controllers
         [Fact]
         public async Task given_valid_driver_and_new_password_it_should_be_changed()
         {
-
             var user = await GetUserAsync("user1@email.com");
             var userId = user.Id;
             var command = new CreateDriver
             {
                 UserId = userId,
                 VehicleBrand = "Ford",
-                VehicleName = "Focus MK1",
-                VehicleSeats = 4
+                VehicleName = "Fiesta",
             };
 
             var payload = GetPayload(command); 

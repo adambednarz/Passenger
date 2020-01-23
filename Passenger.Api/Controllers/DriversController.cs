@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Passenger.Infrastructure.Commands;
 using Passenger.Infrastructure.Commands.Drivers;
@@ -43,8 +44,27 @@ namespace Passenger.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateDriver command)
         {
-            await CommandDispatcher.DispatchAsync(command);
+            await DispatchAsync(command);
             return Created($"/drivers/{command.UserId}", null);
+        }
+
+        [Authorize]
+        [HttpPost("routes")]
+        public async Task<IActionResult> Post([FromBody] CreateDriverRoute command, Guid driverId)
+        {
+            await DispatchAsync(command);
+            return Created("", null);
+        }
+        [Authorize]
+        [HttpDelete("{name}")]
+        public async Task<IActionResult> Delete(string name)
+        {
+            var command = new DeleteDriverRoute
+            {
+                Name = name
+            };
+            await DispatchAsync(command);
+            return NoContent();
         }
     }
 }

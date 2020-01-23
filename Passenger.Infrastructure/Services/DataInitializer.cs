@@ -12,14 +12,16 @@ namespace Passenger.Infrastructure.Services
     {
         private readonly IUserService _userService;
         private readonly IDriverService _driverService;
+        private readonly IDriverRouteService _driverRouteService;
         private readonly ILogger<DataInitializer> _logger;
 
         public DataInitializer(IUserService userService, ILogger<DataInitializer> logger,
-            IDriverService driverService)
+            IDriverService driverService, IDriverRouteService driverRouteService)
         {
             _userService = userService;
             _logger = logger;
             _driverService = driverService;
+            _driverRouteService = driverRouteService;
         }
 
         public async Task SeedAsync()
@@ -29,14 +31,17 @@ namespace Passenger.Infrastructure.Services
             for (int i = 0; i < 10; i++)
             {
                 var userId = Guid.NewGuid();
-                tasks.Add(_userService.RegisterAsync(userId, $"user{i + 1}@email.com", $"User{i + 1}", "password"));
+                tasks.Add(_userService.RegisterAsync(userId, $"user{i + 1}@email.com", $"User{i + 1}", "user", "password"));
                 tasks.Add(_driverService.CreateAsync(userId));
                 tasks.Add(_driverService.AddVehicleAsync(userId, "BMW", "X5"));
+                tasks.Add(_driverRouteService.AddAsync(userId, "Job route", 10, 10, 50, 50));
+                tasks.Add(_driverRouteService.AddAsync(userId, "Gym route", 13, 11, 55, 77));
+                _logger.LogInformation($"User{i}");
             }
             for (int i = 0; i < 3; i++)
             {
                 var userId = Guid.NewGuid();
-                tasks.Add(_userService.RegisterAsync(userId, $"admin{i + 1}@admin.com", $"Admin{i + 1}", "password"));
+                tasks.Add(_userService.RegisterAsync(userId, $"admin{i + 1}@admin.com", $"Admin{i + 1}", "user", "password"));
             }
 
             await Task.WhenAll(tasks);

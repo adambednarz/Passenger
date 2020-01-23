@@ -19,16 +19,16 @@ namespace Passenger.Infrastructure.Services
             _settings = settings;
         }
 
-        public JwtDto CreateToken(string email, string role)
+        public JwtDto CreateToken(Guid userId, string role)
         {
             var now = DateTime.UtcNow;
             var claims = new Claim[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, email),                      // dla kogo 
-                new Claim(ClaimTypes.Role, role),                                   // jaka jest jego rola (uprawnienia)
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),  // unikalny identyfikator tokena
+                new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),                      
+                new Claim(JwtRegisteredClaimNames.UniqueName, userId.ToString()),                      
+                new Claim(ClaimTypes.Role, role),                                   
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),  
                 new Claim(JwtRegisteredClaimNames.Iat, now.ToTimeStamp().ToString(), ClaimValueTypes.Integer64)
-                //IssueAt data stworzenia -- musi być w formacie UNIX od 01.01.1970
             };
 
             var signingCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.Key)),
