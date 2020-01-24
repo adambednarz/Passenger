@@ -2,11 +2,13 @@
 using Passenger.Core.Domain;
 using Passenger.Core.Repositories;
 using Passenger.Infrastructure.DTO;
+using Passenger.Infrastructure.Exceptions;
 using Passenger.Infrastructure.Extensions;
 using Passenger.Infrastructure.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ErrorCode = Passenger.Infrastructure.Exceptions.ErrorCodes;
 
 namespace Passenger.Infrastructure.Services
 {
@@ -41,14 +43,14 @@ namespace Passenger.Infrastructure.Services
         {
             var user = await _userRepository.GetAsync(email);
             if (user == null)
-                throw new Exception("Invalid credentioal");
+                throw new ServiceException(ErrorCode.InvalidCredentials);
 
 
             var hash = _encrypter.GetHash(password, user.Salt);
             if (user.Password == hash)
                 return;
 
-            throw new Exception("Invalid credentioal");
+            throw new ServiceException(ErrorCode.InvalidCredentials);
         }
 
         public async Task  RegisterAsync(Guid userId, string email, 
@@ -57,7 +59,7 @@ namespace Passenger.Infrastructure.Services
             var user = await _userRepository.GetAsync(email);
             if (user != null)
             {
-                throw new Exception($"User with email: '{email}' already exist.");
+                throw new ServiceException(ErrorCode.EmailInUse, $"User with email: '{email}' already exist.");
             }
 
             var salt = _encrypter.GetSalt(password);

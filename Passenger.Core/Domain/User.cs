@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Passenger.Core.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -42,13 +43,13 @@ namespace Passenger.Core.Domain
         {
             if(string.IsNullOrEmpty(userName))
             {
-                throw new Exception("User name can't be empty.");
+                throw new DomainException(ErrorCodes.InvalidEmail, "Username is invalid.");
             }
             if(UserName == userName)
             {
                 return;
             }
-            UserName = userName;
+            UserName = userName.ToLowerInvariant();
             UpdatedAt = DateTime.UtcNow;
         }
 
@@ -56,7 +57,7 @@ namespace Passenger.Core.Domain
         {
             if(string.IsNullOrEmpty(email))
             {
-                throw new Exception("Email can not be empty.");
+                throw new DomainException(ErrorCodes.InvalidEmail,"Email can not be empty.");
             }
             if(Email == email)
             {
@@ -69,7 +70,7 @@ namespace Passenger.Core.Domain
         public void SetRole(string role)
         {
             if (!_roles.Contains(role.ToLowerInvariant()))
-                throw new Exception($"Role: '{role}' is not correct.");
+                throw new DomainException(ErrorCodes.InvalidRole, $"Role: '{role}' is not correct.");
             Role = role.ToLowerInvariant();
             UpdatedAt = DateTime.UtcNow;
         }
@@ -78,11 +79,11 @@ namespace Passenger.Core.Domain
         {
             if(string.IsNullOrEmpty(password))
             {
-                throw new Exception("Password can not be empty");
+                throw new DomainException(ErrorCodes.InvalidPassword,  "Password can not be empty");
             }
             if(password.Length < 4)
             {
-                throw new Exception("Password must be longer than 4 signs.");
+                throw new DomainException(ErrorCodes.InvalidPassword, "Password must be longer than 4 signs.");
             }
             if(Password == password)
             {
@@ -96,7 +97,7 @@ namespace Passenger.Core.Domain
         {
             if (string.IsNullOrEmpty(salt))
             {
-                throw new Exception("Salt can not be empty");
+                throw new DomainException(ErrorCodes.InvalidPassword, "Salt can not be empty");
             }
             if (Salt == salt)
             {

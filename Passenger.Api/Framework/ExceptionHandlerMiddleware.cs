@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Passenger.Infrastructure.Exceptions;
 using System; 
 using System.Net;
 using System.Threading.Tasks;
@@ -37,6 +38,10 @@ namespace Passenger.Api.Framework
                 case Exception e when exceptionType == typeof(UnauthorizedAccessException):
                     statusCode = HttpStatusCode.Unauthorized;
                     break;
+                case ServiceException e when exceptionType == typeof(ServiceException):
+                    statusCode = HttpStatusCode.BadRequest;
+                    errorCode = e.Code;
+                    break;   
 
                 default:
                     statusCode = HttpStatusCode.InternalServerError;

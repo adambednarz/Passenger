@@ -1,9 +1,12 @@
 ﻿using Passenger.Core.Domain;
 using Passenger.Core.Repositories;
+using Passenger.Infrastructure.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ErrorCode = Passenger.Infrastructure.Exceptions.ErrorCodes;
+
 
 namespace Passenger.Infrastructure.Extensions
 {
@@ -13,7 +16,7 @@ namespace Passenger.Infrastructure.Extensions
         {
             var user =  await userRepository.GetAsync(userId);
             if (user == null)
-                throw new Exception($"User with id: {userId} does not found");
+                throw new ServiceException(ErrorCode.UserNotFound, $"User with id: {userId} does not found");
             return user;
         }
 
@@ -21,7 +24,7 @@ namespace Passenger.Infrastructure.Extensions
         {
             var user = await userRepository.GetAsync(email);
             if (user == null)
-                throw new Exception($"User with email: {email} does not found");
+                throw new ServiceException(ErrorCode.UserNotFound, $"User with email: {email} does not found");
             return user;
         }
 
@@ -29,7 +32,7 @@ namespace Passenger.Infrastructure.Extensions
         {
             var driver = await driverRepository.GetAsync(userId);
             if (driver == null)
-                throw new Exception($"Driver with id: {userId} does not found");
+                throw new ServiceException(ErrorCode.DriverNotFound, $"Driver with id: {userId} does not found");
             return driver;
         }
     }
