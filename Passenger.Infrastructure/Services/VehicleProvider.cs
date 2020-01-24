@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
-using Passenger.Core.Domain;
 using Passenger.Infrastructure.DTO;
 using Passenger.Infrastructure.Services.Interfaces;
 using System;

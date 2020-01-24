@@ -33,12 +33,12 @@ namespace Passenger.Core.Domain
             UpdatedAt = DateTime.UtcNow;
         }
 
-        public void AddRoute(Route route)
+        public void AddRoute(string name, Node startNode, Node endNode, double distance)
         {
-            var routeIs = _routes.SingleOrDefault(x => x.Name == route.Name);
-            if (routeIs != null)
-                throw new Exception($"Route with name '{route.Name}' already exist for driver:  '{Name}'");
-            _routes.Add(route);
+            var route = Routes.Where(x => x.DriverId == UserId).SingleOrDefault(g => g.Name == name);
+            if (route != null)
+                throw new Exception($"Route with name '{name}' already exist for driver:  '{Name}'");
+            _routes.Add(Route.Create(this, name, startNode, endNode, distance));
             UpdatedAt = DateTime.UtcNow;
         }
 

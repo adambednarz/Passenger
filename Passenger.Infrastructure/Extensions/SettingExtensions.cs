@@ -4,7 +4,7 @@ namespace Passenger.Infrastructure.Extensions
 {
     public static class SettingExtensions
     {
-        public static T GetSettings<T>(this IConfiguration configuration) where T: new()   // where new() <- oznacza że T należy do klas
+        public static T GetSettings<T>(this IConfiguration configuration) where T: new()   
         {
             var section = typeof(T).Name.Replace("Settings", string.Empty);
             var configurationValue = new T();

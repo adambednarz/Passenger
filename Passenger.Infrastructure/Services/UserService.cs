@@ -2,6 +2,7 @@
 using Passenger.Core.Domain;
 using Passenger.Core.Repositories;
 using Passenger.Infrastructure.DTO;
+using Passenger.Infrastructure.Extensions;
 using Passenger.Infrastructure.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace Passenger.Infrastructure.Services
 
         public async Task<UserDto> GetAsync(string email)
         {
-            var user = await _userRepository.GetAsync(email);
+            var user = await _userRepository.GetUserOrFailAsync(email);
             return _mapper.Map<User, UserDto>(user);
         }
 
@@ -40,15 +41,13 @@ namespace Passenger.Infrastructure.Services
         {
             var user = await _userRepository.GetAsync(email);
             if (user == null)
-            {
                 throw new Exception("Invalid credentioal");
-            }
+
 
             var hash = _encrypter.GetHash(password, user.Salt);
             if (user.Password == hash)
-            {
                 return;
-            }
+
             throw new Exception("Invalid credentioal");
         }
 
@@ -65,7 +64,6 @@ namespace Passenger.Infrastructure.Services
             var hash = _encrypter.GetHash(password, salt);
             user = new User(userId, email, userName, role, hash, salt);
             await _userRepository.AddAsync(user);
-          //  user = new User() 
         }
     }
 }

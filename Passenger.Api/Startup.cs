@@ -13,6 +13,7 @@ using Passenger.Infrastructure.Settings;
 using Newtonsoft.Json;
 using Passenger.Infrastructure.IoC;
 using Passenger.Infrastructure.Services.Interfaces;
+using Passenger.Api.Framework;
 
 namespace Passenger.Api
 {
@@ -96,9 +97,9 @@ namespace Passenger.Api
                 var dataInitializer = app.ApplicationServices.GetService<IDataInitializer>();
                 dataInitializer.SeedAsync();
             }
-
             app.UseAuthentication();
             app.UseHttpsRedirection();
+            app.UseExceptionsHandler();
             app.UseMvc();
             applicationLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
         }

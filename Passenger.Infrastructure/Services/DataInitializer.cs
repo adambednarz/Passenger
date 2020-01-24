@@ -33,10 +33,9 @@ namespace Passenger.Infrastructure.Services
                 var userId = Guid.NewGuid();
                 tasks.Add(_userService.RegisterAsync(userId, $"user{i + 1}@email.com", $"User{i + 1}", "user", "password"));
                 tasks.Add(_driverService.CreateAsync(userId));
-                tasks.Add(_driverService.AddVehicleAsync(userId, "BMW", "X5"));
+                tasks.Add(_driverService.SetVehicleAsync(userId, "BMW", "X5"));
                 tasks.Add(_driverRouteService.AddAsync(userId, "Job route", 10, 10, 50, 50));
                 tasks.Add(_driverRouteService.AddAsync(userId, "Gym route", 13, 11, 55, 77));
-                _logger.LogInformation($"User{i}");
             }
             for (int i = 0; i < 3; i++)
             {

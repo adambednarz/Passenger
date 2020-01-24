@@ -22,7 +22,7 @@ namespace Passenger.Api.Controllers
         
 
         [HttpGet]
-        public async Task<ActionResult> Get()
+        public async Task<ActionResult> Browse()
         {
             var drivers = await _driverService.BrowseAsync();
             if (drivers == null)
@@ -41,29 +41,27 @@ namespace Passenger.Api.Controllers
             return Json(driver);
         }
 
+        [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreateDriver command)
+        public async Task<IActionResult> Create([FromBody] CreateDriver command)
         {
             await DispatchAsync(command);
             return Created($"/drivers/{command.UserId}", null);
         }
 
         [Authorize]
-        [HttpPost("routes")]
-        public async Task<IActionResult> Post([FromBody] CreateDriverRoute command, Guid driverId)
+        [HttpPut("me")]
+        public async Task<IActionResult> Update([FromBody] UpdateDriver command)
         {
             await DispatchAsync(command);
-            return Created("", null);
+            return NoContent();
         }
+
         [Authorize]
-        [HttpDelete("{name}")]
-        public async Task<IActionResult> Delete(string name)
+        [HttpDelete("me")]
+        public async Task<IActionResult> Delete()
         {
-            var command = new DeleteDriverRoute
-            {
-                Name = name
-            };
-            await DispatchAsync(command);
+            await DispatchAsync(new DeleteDriver());
             return NoContent();
         }
     }
