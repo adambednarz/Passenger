@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Passenger.Infrastructure.Commands;
-using Passenger.Infrastructure.Commands.Users;
+using Passenger.Infrastructure.Commands.Accounts;
 using Passenger.Infrastructure.Extensions;
 
 namespace Passenger.Api.Controllers
